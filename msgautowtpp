@@ -1,0 +1,72 @@
+import webbrowser
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+
+
+class WhatsAppApp(App):
+    def build(self):
+        layout = BoxLayout(orientation="vertical", spacing=10)
+
+        self.number_input = TextInput(hint_text="Número do Cliente")
+        self.message_input = TextInput(hint_text="Mensagem")
+        self.open_button = Button(text="Abrir Conversa", on_press=self.open_conversation)
+        self.save_button = Button(text="Salvar Feedback", on_press=self.save_feedback)
+        self.feedback_label = Label(text="")
+
+        layout.add_widget(self.number_input)
+        layout.add_widget(self.message_input)
+        layout.add_widget(self.open_button)
+        layout.add_widget(self.save_button)
+        layout.add_widget(self.feedback_label)
+
+        self.feedback_list = []  # Armazena os feedbacks
+
+        return layout
+
+    def open_conversation(self, instance):
+        # Obtenha o número do cliente e a mensagem pré-definida
+        number = self.number_input.text
+        message = self.message_input.text
+
+        # Verifique se o número do cliente foi fornecido
+        if number:
+            # Construa o link para abrir a conversa no WhatsApp
+            url = f"https://web.whatsapp.com/send?phone={number}&text={message}"
+
+            # Abra o link no navegador padrão
+            webbrowser.open(url)
+
+            # Fornecer feedback ao usuário
+            self.feedback_label.text = "Conversa aberta no WhatsApp!"
+
+        else:
+            self.feedback_label.text = "Insira o número do cliente!"
+
+    def save_feedback(self, instance):
+        # Obtenha o feedback do usuário
+        feedback = self.message_input.text
+
+        # Verifique se há feedback antes de salvá-lo
+        if feedback:
+            self.feedback_list.append(feedback)
+            self.feedback_label.text = "Feedback salvo com sucesso!"
+
+            # Limpe o campo de entrada do feedback
+            self.message_input.text = ""
+
+        else:
+            self.feedback_label.text = "Insira um feedback válido!"
+
+    def on_stop(self):
+        # Gere o relatório de atendimento quando o aplicativo for fechado
+        if self.feedback_list:
+            report = "\n".join(self.feedback_list)
+            with open("relatorio_atendimento.txt", "w") as file:
+                file.write(report)
+
+
+if __name__ == "__main__":
+    WhatsAppApp().run()
