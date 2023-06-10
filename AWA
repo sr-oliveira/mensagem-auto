@@ -1,0 +1,114 @@
+import webbrowser
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.filechooser import FileChooserListView
+from kivy.uix.popup import Popup
+from kivy.clock import Clock
+
+
+class AWA(App):
+    def build(self):
+        layout = BoxLayout(orientation="horizontal", spacing=10)
+
+        # Layout para o lado esquerdo com o formulário de abertura de conversas
+        left_layout = BoxLayout(orientation="vertical", spacing=10)
+
+        self.number_input = TextInput(hint_text="Números dos Clientes (separados por vírgula)")
+        self.message_input = TextInput(hint_text="Mensagem")
+        self.open_button = Button(text="Abrir Conversas", on_press=self.open_conversations)
+        self.feedback_label = Label(text="")
+
+        left_layout.add_widget(Label(text="Abrir Conversas"))
+        left_layout.add_widget(self.number_input)
+        left_layout.add_widget(self.message_input)
+        left_layout.add_widget(self.open_button)
+        left_layout.add_widget(self.feedback_label)
+
+        layout.add_widget(left_layout)
+
+        # Layout para o painel de anotações e botão de salvar
+        right_layout = BoxLayout(orientation="vertical", spacing=10)
+
+        self.save_button = Button(text="Salvar Anotações", size_hint=(1, None), height=50, on_press=self.save_notes)
+        right_layout.add_widget(self.save_button)
+
+        self.notes_input = TextInput(hint_text="Faça suas anotações aqui...", size_hint=(1, 0.15))
+        right_layout.add_widget(self.notes_input)
+
+        layout.add_widget(right_layout)
+
+        return layout
+
+    # Restante do código aqui...
+
+
+    def open_conversations(self, instance):
+        # Obtenha os números dos clientes e a mensagem pré-definida
+        numbers = self.number_input.text.split(",")
+        message = self.message_input.text
+
+        # Verifique se foram fornecidos números de clientes
+        if numbers:
+            self.open_button.disabled = True  # Desativa o botão de abrir conversas
+            self.feedback_label.text = "Abrindo conversas..."
+
+            # Chama a função para abrir as conversas em uma função separada para evitar bloqueio do loop principal
+            Clock.schedule_once(lambda dt: self.open_conversations_delayed(numbers, message), 0)
+
+        else:
+            self.feedback_label.text = "Insira os números dos clientes!"
+
+    def open_conversations_delayed(self, numbers, message):
+        if numbers:
+            number = numbers[0].strip()
+
+            # Verifique se o número é válido antes de construir o link
+            if number:
+                # Construa o link para abrir a conversa no WhatsApp
+                url = f"https://web.whatsapp.com/send?phone={number}&text={message}"
+
+                # Abra o link no navegador padrão
+                webbrowser.open(url)
+
+                self.feedback_label.text = f"Conversa aberta com o número: {number}"
+                self.number_input.text = ",".join(numbers[1:])  # Atualiza a entrada de números
+
+                # Chama a função novamente com o próximo número após 30 segundos
+                Clock.schedule_once(lambda dt: self.open_conversations_delayed(numbers[1:], message), 30)
+
+        else:
+            self.feedback_label.text = "Conversas abertas no WhatsApp!"
+            self.open_button.disabled = False  # Reativa o botão de abrir conversas
+
+    def save_notes(self, instance):
+        # Exibir o seletor de arquivo para o usuário escolher o local de salvamento
+        file_chooser = FileChooserListView()
+
+        # Definir a função de salvar para ser chamada quando o usuário selecionar um local e um nome de arquivo
+        file_chooser.on_submit = lambda x: self.save_notes_to_file(x[0])
+
+        popup = Popup(title="Salvar Anotações", content=file_chooser, size_hint=(None, None), size=(400, 400))
+        popup.open()
+
+    def save_notes_to_file(self, path):
+        # Verificar se o caminho de salvamento foi selecionado
+        if path:
+            # Definir o nome do arquivo como "notes.txt"
+            file_name = "notes.txt"
+
+            # Caminho completo do arquivo
+            file_path = f"{path}/{file_name}"
+
+            # Salvar as anotações no arquivo
+            with open(file_path, "w") as file:
+                file.write(self.notes_input.text)
+
+            # Fechar o popup de seleção de arquivo
+            App.get_running_app().root_window.dismiss()
+
+
+if __name__ == "__main__":
+    AWA().run()
