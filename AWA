@@ -1,12 +1,12 @@
-import webbrowser
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
-from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.popup import Popup
 from kivy.clock import Clock
+from tkinter import Tk, filedialog
+import webbrowser
 
 
 class AWA(App):
@@ -42,9 +42,6 @@ class AWA(App):
 
         return layout
 
-    # Restante do código aqui...
-
-
     def open_conversations(self, instance):
         # Obtenha os números dos clientes e a mensagem pré-definida
         numbers = self.number_input.text.split(",")
@@ -76,31 +73,25 @@ class AWA(App):
                 self.feedback_label.text = f"Conversa aberta com o número: {number}"
                 self.number_input.text = ",".join(numbers[1:])  # Atualiza a entrada de números
 
-                # Chama a função novamente com o próximo número após 30 segundos
-                Clock.schedule_once(lambda dt: self.open_conversations_delayed(numbers[1:], message), 30)
+                # Chama a função novamente com o próximo número após 20 segundos
+                Clock.schedule_once(lambda dt: self.open_conversations_delayed(numbers[1:], message), 20)
 
         else:
             self.feedback_label.text = "Conversas abertas no WhatsApp!"
             self.open_button.disabled = False  # Reativa o botão de abrir conversas
 
     def save_notes(self, instance):
-        # Exibir o seletor de arquivo para o usuário escolher o local de salvamento
-        file_chooser = FileChooserListView()
+        # Abrir diálogo de seleção de diretório para escolher o local de salvamento
+        root = Tk()
+        root.withdraw()
+        directory = filedialog.askdirectory()
 
-        # Definir a função de salvar para ser chamada quando o usuário selecionar um local e um nome de arquivo
-        file_chooser.on_submit = lambda x: self.save_notes_to_file(x[0])
-
-        popup = Popup(title="Salvar Anotações", content=file_chooser, size_hint=(None, None), size=(400, 400))
-        popup.open()
-
-    def save_notes_to_file(self, path):
-        # Verificar se o caminho de salvamento foi selecionado
-        if path:
+        if directory:
             # Definir o nome do arquivo como "notes.txt"
             file_name = "notes.txt"
 
             # Caminho completo do arquivo
-            file_path = f"{path}/{file_name}"
+            file_path = f"{directory}/{file_name}"
 
             # Salvar as anotações no arquivo
             with open(file_path, "w") as file:
