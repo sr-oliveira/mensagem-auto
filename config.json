@@ -1,0 +1,10 @@
+{
+    "programs": [
+      "python"
+    ],
+    "libraries": [
+      "kivy",
+      "webbrowser"
+    ]
+  }
+  
