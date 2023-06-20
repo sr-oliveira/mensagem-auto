@@ -1,105 +1,226 @@
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.popup import Popup
-from kivy.clock import Clock
-from tkinter import Tk, filedialog
 import webbrowser
+from kivy.app import App
+from kivy.core.window import Window
+from kivy.config import Config
+from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+from kivy.uix.scrollview import ScrollView
 
+class MainLayout(BoxLayout):
+    def __init__(self, **kwargs):
+        super(MainLayout, self).__init__(**kwargs)
+        self.orientation = "vertical"
+        self.spacing = 10
+        self.padding = [10, 20]
 
-class AWA(App):
-    def build(self):
-        layout = BoxLayout(orientation="horizontal", spacing=10)
-
-        # Layout para o lado esquerdo com o formulário de abertura de conversas
-        left_layout = BoxLayout(orientation="vertical", spacing=10)
-
-        self.number_input = TextInput(hint_text="Números dos Clientes (separados por vírgula)")
+        self.number_input = TextInput(hint_text="Número do Cliente")
         self.message_input = TextInput(hint_text="Mensagem")
-        self.open_button = Button(text="Abrir Conversas", on_press=self.open_conversations)
-        self.feedback_label = Label(text="")
+        self.open_button = Button(text="Abrir Conversa", on_press=self.open_conversation)
+        self.save_button = Button(text="Salvar Feedback", on_press=self.save_feedback)
+        self.search_button = Button(text="Pesquisar Cliente", on_press=self.search_customer)
+        self.history_button = Button(text="Histórico de Conversas", on_press=self.view_conversation_history)
+        self.quick_responses_button = Button(text="Respostas Rápidas", on_press=self.view_quick_responses)
+        self.file_button = Button(text="Enviar Arquivo", on_press=self.send_file)
+        self.notifications_button = Button(text="Notificações em Tempo Real", on_press=self.real_time_notifications)
+        self.authentication_button = Button(text="Autenticação de Funcionários", on_press=self.employee_authentication)
+        self.export_button = Button(text="Exportar Relatórios", on_press=self.export_reports)
+        self.call_button = Button(text="Registro de Chamadas", on_press=self.call_logging)
+        self.feedback_label = Label(text="", size_hint_y=None, height=50)
 
-        left_layout.add_widget(Label(text="Abrir Conversas"))
-        left_layout.add_widget(self.number_input)
-        left_layout.add_widget(self.message_input)
-        left_layout.add_widget(self.open_button)
-        left_layout.add_widget(self.feedback_label)
+        self.add_widget(self.number_input)
+        self.add_widget(self.message_input)
+        self.add_widget(self.open_button)
+        self.add_widget(self.save_button)
+        self.add_widget(self.search_button)
+        self.add_widget(self.history_button)
+        self.add_widget(self.quick_responses_button)
+        self.add_widget(self.file_button)
+        self.add_widget(self.notifications_button)
+        self.add_widget(self.authentication_button)
+        self.add_widget(self.export_button)
+        self.add_widget(self.call_button)
+        self.add_widget(self.feedback_label)
 
-        layout.add_widget(left_layout)
+        self.feedback_list = []  # Armazena os feedbacks
+        self.customer_conversations = {}  # Armazena o histórico de conversas com clientes
 
-        # Layout para o painel de anotações e botão de salvar
-        right_layout = BoxLayout(orientation="vertical", spacing=10)
+    def open_conversation(self, instance):
+        # Obtenha o número do cliente e a mensagem pré-definida
+        number = self.number_input.text
+        message = self.message_input.text
 
-        self.save_button = Button(text="Salvar Anotações", size_hint=(1, None), height=50, on_press=self.save_notes)
-        right_layout.add_widget(self.save_button)
+        # Verifique se o número do cliente foi fornecido
+        if number:
+            # Construa o link para abrir a conversa no WhatsApp
+            url = f"https://web.whatsapp.com/send?phone={number}&text={message}"
 
-        self.notes_input = TextInput(hint_text="Faça suas anotações aqui...", size_hint=(1, 0.15))
-        right_layout.add_widget(self.notes_input)
+            # Abra o link no navegador padrão
+            webbrowser.open(url)
 
-        layout.add_widget(right_layout)
+            # Fornecer feedback ao usuário
+            self.feedback_label.text = "Conversa aberta no WhatsApp!"
+        else:
+            self.feedback_label.text = "Insira o número do cliente!"
+
+    def save_feedback(self, instance):
+        # Obtenha o feedback do usuário
+        feedback = self.message_input.text
+
+        # Verifique se há feedback antes de salvá-lo
+        if feedback:
+            self.feedback_list.append(feedback)
+            self.feedback_label.text = "Feedback salvo com sucesso!"
+
+            # Limpe o campo de entrada do feedback
+            self.message_input.text = ""
+        else:
+            self.feedback_label.text = "Insira um feedback válido!"
+
+    def search_customer(self, instance):
+        customer_id = self.number_input.text
+        if customer_id:
+            if customer_id in self.customer_conversations:
+                conversation_history = self.customer_conversations[customer_id]
+                popup_content = ScrollView()
+                layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
+                for message in conversation_history:
+                    layout.add_widget(Label(text=message, size_hint_y=None, height=30))
+                popup_content.add_widget(layout)
+                popup = Popup(title="Histórico de Conversas", content=popup_content, size_hint=(None, None),
+                              size=(400, 400))
+                popup.open()
+            else:
+                self.feedback_label.text = "Não há histórico de conversas para o cliente fornecido."
+        else:
+            self.feedback_label.text = "Insira o número do cliente!"
+
+    def view_conversation_history(self, instance):
+        customer_id = self.number_input.text
+        if customer_id:
+            if customer_id in self.customer_conversations:
+                conversation_history = self.customer_conversations[customer_id]
+                popup_content = ScrollView()
+                layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
+                for message in conversation_history:
+                    layout.add_widget(Label(text=message, size_hint_y=None, height=30))
+                popup_content.add_widget(layout)
+                popup = Popup(title="Histórico de Conversas", content=popup_content, size_hint=(None, None),
+                              size=(400, 400))
+                popup.open()
+            else:
+                self.feedback_label.text = "Não há histórico de conversas para o cliente fornecido."
+        else:
+            self.feedback_label.text = "Insira o número do cliente!"
+
+    def view_quick_responses(self, instance):
+        quick_responses = [
+            "Obrigado pelo seu contato!",
+            "Como posso ajudar?",
+            "Lamentamos o inconveniente. Faremos o possível para resolver o problema.",
+            "Sua solicitação foi recebida. Entraremos em contato em breve.",
+            "Por favor, forneça mais informações sobre o problema que você está enfrentando."
+        ]
+        popup_content = ScrollView()
+        layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
+        for response in quick_responses:
+            layout.add_widget(Button(text=response, on_press=self.insert_quick_response))
+        popup_content.add_widget(layout)
+        popup = Popup(title="Respostas Rápidas", content=popup_content, size_hint=(None, None), size=(400, 400))
+        popup.open()
+
+    def insert_quick_response(self, instance):
+        quick_response = instance.text
+        current_message = self.message_input.text
+        self.message_input.text = current_message + "\n" + quick_response
+
+    def send_file(self, instance):
+        # Lógica para enviar arquivos
+        self.feedback_label.text = "Arquivo enviado com sucesso!"
+
+    def real_time_notifications(self, instance):
+        # Lógica para implementar notificações em tempo real
+        self.feedback_label.text = "Notificações em tempo real ativadas!"
+
+    def employee_authentication(self, instance):
+        # Lógica para autenticação de funcionários
+        self.feedback_label.text = "Autenticação de funcionários ativada!"
+
+    def export_reports(self, instance):
+        # Lógica para exportar relatórios
+        if self.feedback_list:
+            report = "\n".join(self.feedback_list)
+            with open("relatorio_atendimento.txt", "w") as file:
+                file.write(report)
+            self.feedback_label.text = "Relatório exportado com sucesso!"
+        else:
+            self.feedback_label.text = "Não há feedbacks para exportar!"
+
+    def call_logging(self, instance):
+        # Lógica para registrar chamadas
+        self.feedback_label.text = "Registro de chamadas ativado!"
+
+    def on_stop(self):
+        # Gere o relatório de atendimento quando o aplicativo for fechado
+        if self.feedback_list:
+            report = "\n".join(self.feedback_list)
+            with open("relatorio_atendimento.txt", "w") as file:
+                file.write(report)
+
+        # Salve o histórico de conversas com os clientes em um arquivo
+        if self.customer_conversations:
+            with open("historico_conversas.txt", "w") as file:
+                for customer_id, conversation_history in self.customer_conversations.items():
+                    file.write(f"Cliente {customer_id}:\n")
+                    for message in conversation_history:
+                        file.write(f"- {message}\n")
+                    file.write("\n")
+
+    def add_customer_conversation(self, customer_id, message):
+        if customer_id in self.customer_conversations:
+            self.customer_conversations[customer_id].append(message)
+        else:
+            self.customer_conversations[customer_id] = [message]
+
+
+class WhatsAppApp(App):
+    def build(self):
+        Config.set('graphics', 'width', '400')
+        Config.set('graphics', 'height', '800')
+        Window.size = (400, 800)
+        Window.minimum_width, Window.minimum_height = Window.size
+        Window.clearcolor = (0.95, 0.95, 0.95, 1)  # Define a cor de fundo da janela
+
+        layout = MainLayout()
+        layout.number_input.background_color = (1, 1, 1, 1)  # Define a cor de fundo da entrada de texto
+        layout.number_input.foreground_color = (0, 0, 0, 1)  # Define a cor do texto da entrada de texto
+        layout.message_input.background_color = (1, 1, 1, 1)  # Define a cor de fundo da entrada de texto
+        layout.message_input.foreground_color = (0, 0, 0, 1)  # Define a cor do texto da entrada de texto
+        layout.open_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.open_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.save_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.save_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.search_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.search_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.history_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.history_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.quick_responses_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.quick_responses_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.file_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.file_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.notifications_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.notifications_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.authentication_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.authentication_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.export_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.export_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
+        layout.call_button.background_color = (0.2, 0.6, 0.9, 1)  # Define a cor de fundo do botão
+        layout.call_button.color = (1, 1, 1, 1)  # Define a cor do texto do botão
 
         return layout
 
-    def open_conversations(self, instance):
-        # Obtenha os números dos clientes e a mensagem pré-definida
-        numbers = self.number_input.text.split(",")
-        message = self.message_input.text
-
-        # Verifique se foram fornecidos números de clientes
-        if numbers:
-            self.open_button.disabled = True  # Desativa o botão de abrir conversas
-            self.feedback_label.text = "Abrindo conversas..."
-
-            # Chama a função para abrir as conversas em uma função separada para evitar bloqueio do loop principal
-            Clock.schedule_once(lambda dt: self.open_conversations_delayed(numbers, message), 0)
-
-        else:
-            self.feedback_label.text = "Insira os números dos clientes!"
-
-    def open_conversations_delayed(self, numbers, message):
-        if numbers:
-            number = numbers[0].strip()
-
-            # Verifique se o número é válido antes de construir o link
-            if number:
-                # Construa o link para abrir a conversa no WhatsApp
-                url = f"https://web.whatsapp.com/send?phone={number}&text={message}"
-
-                # Abra o link no navegador padrão
-                webbrowser.open(url)
-
-                self.feedback_label.text = f"Conversa aberta com o número: {number}"
-                self.number_input.text = ",".join(numbers[1:])  # Atualiza a entrada de números
-
-                # Chama a função novamente com o próximo número após 20 segundos
-                Clock.schedule_once(lambda dt: self.open_conversations_delayed(numbers[1:], message), 20)
-
-        else:
-            self.feedback_label.text = "Conversas abertas no WhatsApp!"
-            self.open_button.disabled = False  # Reativa o botão de abrir conversas
-
-    def save_notes(self, instance):
-        # Abrir diálogo de seleção de diretório para escolher o local de salvamento
-        root = Tk()
-        root.withdraw()
-        directory = filedialog.askdirectory()
-
-        if directory:
-            # Definir o nome do arquivo como "notes.txt"
-            file_name = "notes.txt"
-
-            # Caminho completo do arquivo
-            file_path = f"{directory}/{file_name}"
-
-            # Salvar as anotações no arquivo
-            with open(file_path, "w") as file:
-                file.write(self.notes_input.text)
-
-            # Fechar o popup de seleção de arquivo
-            App.get_running_app().root_window.dismiss()
-
 
 if __name__ == "__main__":
-    AWA().run()
+    WhatsAppApp().run()
