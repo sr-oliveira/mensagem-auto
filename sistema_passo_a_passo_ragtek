@@ -1,0 +1,344 @@
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import scrolledtext
+
+# Funções para exibir os passos de cada situação
+def contratacao():
+    window = tk.Toplevel(root)
+    window.title("Contratação")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=50, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text = """ABA CLIENTE
+Tipo de Cliente: “Clientes em Geral”, “Clientes cortesia” ou “Funcionário”
+Tipo de Cliente - Fiscal: “Residência / Pessoa Física” ou “Produtor Rural”
+Tipo de pessoa: Física
+Razão Social / Nome: Nome do cliente (Copiar da consulta ou da pesquisa cpf)
+CNPJ/CPF: Copiar da Consulta ou Pesquisar (clicando no botão Cartão CPF)
+IE/RG: RG
+RG orgão emissor:
+Data de Nascimento:
+Sexo:
+Outras Informações:
+Tipo de Assinante: Residencial/Pessoa Física
+Filial:
+
+
+ABA ENDEREÇO
+Residência:
+CEP:
+Endereço: Nome da Rua
+Número: Caso não tenha, preencher com SN
+Complemento: QD e LT e Casa, Coordenadas de localização.
+Bairro:
+Moradia Própria ou Alugada:
+Tipo de Localidade: Rural ou Urbana
+Prédio:
+Condomínio: Localizar o condomínio do cliente, se não tiver pedir para cadastrar
+Bloco:
+Apartamento:
+Complemento: Nome do Prédio, Bloco e Apto (no Tropicale colocar apenas o Residencial, 
+Edifício e Apto)
+Moradia Própria ou Alugada:
+Tipo de Localidade: Urbana
+Rural:
+CEP:
+Endereço: KM, Nome da Fazenda, Nome da Chácara
+Número: SN
+Complemento: Alguma referência do endereço, Coordenadas de localização
+Bairro: Zona Rural
+Tipo de Localidade: Rural
+
+
+ABA CONTATO
+Preencher o máximo possível.
+Telefone Residencial:
+Telefone Comercial:
+Telefone Celular:
+Whatsapp: Repetir o número caso seja o mesmo do celular
+E-mail: Deixar o cliente ciente que é a única maneira de recebimento automático do boleto
+Central do Assinante:
+Login: CPF do cliente (apenas números)
+Senha: 123456
+SALVAR
+
+
+ABA CRM
+Canal de Vendas: Indicar como o cliente chegou até a empresa
+Concorrente: Caso esteja vindo de outro provedor coloque o nome
+Indicado Por: Selecionar o cliente que o indicou
+
+
+ABA CONTRATO
+Novo
+Plano de Venda:
+Com Fidelidade: 50MB (227), 100MB (226), 1000MB (223)
+Sem Fidelidade: 25MB (178), 50MB (215), 100MB (183), 150MB (185), 200MB (203)
+Rádio: 10MB (112), 15MB (113), 20MB (189)
+Tipo de Cobrança:
+Boleto: Dia 5 (38), Dia 10 (39), Dia 15 (40), Dia 20 (41)
+Carnê (sujeito a autorização): Dia 5 (22), Dia 10 (43), Dia 15 (44), Dia 20 (45)
+Modelo para Impressão:
+Com Fidelidade: 
+50MB ou 100MB (14) - Contrato Ragtek WIFI 2.4
+1000MB com 1 equipamento (10) - Contrato Ragtek ILIMITADO AC
+1000MB com 2 equipamentos (11) - Contrato Ragtek MESH 2R
+1000MB com 3 equipamentos (12) - Contrato Ragtek MESH 3R
+Sem Fidelidade: 
+25MB ou 50MB (13) - Contrato Ragtek SEM FIDELIDADE 2.4
+100MB, 150MB ou 200MB (7) - Contrato Ragtek SEM FIDELIDADE AC
+Rádio (6) - Contrato Ragtek sem fidelidade
+Rádio em comodato (9) - Contrato Radio Comodato
+Filial:
+Indicado Através: Preencher nos casos de indicações, exemplo Administração de prédios
+Data da Ativação: Data que estiver realizando o cadastro
+Motivo Inclusão: Instalação
+
+
+ABA FATURAMENTO
+Vendedor: Indicar quem vendeu
+Fiscal:
+Tipo de Documento Opcional 2: 633
+Tipo de Documento Opcional 3: 600
+ABA TAXA DE ATIVAÇÃO
+Com Fidelidade:
+Taxa de instalação (R$): 550,00
+Responsável/Vendedor: Colocar o nome do supervisor, Interno: Raissa / Externo: Lucas, se for 
+indicação do Ricardo ou minha não precisa
+Vendedor ativação: Vendedor
+Valor Parcela: Desconto aplicado no produto x 12 (quantidade de meses de fidelidade)
+Fidelidade (meses): 12
+Data Expiração: Mesma data da ativação, porém do ano seguinte.
+Desconto fidelidade (R$): 550,00.
+SALVAR
+
+Sem Fidelidade e Rádio:
+Taxa de instalação (R$): Valor exato que o cliente pagará pela ativação.
+Responsável/Vendedor: Colocar o nome do supervisor, Interno: Raissa / Externo: Lucas, se for 
+indicação do Ricardo ou minha não precisa
+Vendedor ativação: Vendedor
+Valor Parcela: Desconto aplicado no produto x 12 (quantidade de meses de fidelidade)
+Fidelidade (meses): 0
+Data Expiração: Não preenche nesse caso
+Desconto fidelidade (R$): 0,00.
+SALVAR
+
+Fibra Rural Com Fidelidade:
+Taxa de instalação (R$): 1000,00
+Responsável/Vendedor: Colocar o nome do supervisor, Interno: Raissa / Externo: Lucas, se for 
+indicação do Ricardo ou minha não precisa
+Vendedor ativação: Vendedor
+Valor Parcela: Desconto aplicado no produto x 12 (quantidade de meses de fidelidade)
+Fidelidade (meses): 12
+Data Expiração: Mesma data da ativação, porém do ano seguinte.
+Desconto fidelidade (R$): 500,00.
+Nesse tipo de contratação deverá preencher sempre dessa maneira, independente do valor 
+que o cliente vá pagar. O verdadeiro valor deverá ser informado na aba serviços dentro da O.S,
+como TAXA DE INSTALAÇÃO – ID 152 (R$ 500,00 quando for a vista e R$ 550,00 parcelado), o 
+restante do valor deve ser informado como TAXA DE INSTALAÇÃO – EXCEDENTE – ID 762.
+SALVAR
+
+
+ABA PRODUTOS
+Selecionar um dos dois produtos e:
+Editar
+Descontos
+Novo -> Descrição (Promoção, Indicação Ricardo) -> Valor (Desconto a aplicar)
+SALVAR
+Selecionar o outro produto e repetir o processo.
+SALVAR
+Antes de prosseguir confira se o valor líquido ficou correto
+ABA LOGIN
+Novo
+Autenticação: PPPoE
+Tipo de Conexão: Fibra ou 5.8 quando for rádio.
+Cliente: Selecione o cliente através do nome completo ou ID
+Plano:
+Login: Primeiro e último nome sem espaço, letras minúsculas
+Senha PPPoE/Hotspot: ragtek (letras minúsculas)
+SALVAR
+ABA ATENDIMENTO
+Novo
+Login
+Filial
+Assunto: ID 2 - ATIVAÇÃO/ACEITE ELETRÔNICO
+Processo: ID 6 – ATIVAÇÃO CONTRATUAL
+Departamento: ID 8 – Comercial
+Colaborador responsável: Manter em seu nome
+Descrição: Responder o Check List
+SALVAR -> Após essa etapa uma O.S AGUARDANDO ASSINATURA será aberta 
+automaticamente, assuma a O.S imediatamente, após, saia do contrato e prossiga o cadastro.
+ABA ARQUIVOS
+Novo
+Descrição: Use os títulos padrões do informativo
+Obs: Anexar documentos nítidos
+ABA REF
+Nome: Nome e grau de proximidade com o cliente (tentar conseguir as duas referências)
+Telefone ref:
+ABA OBSERVAÇÕES
+Observações: Campo destinado a qualquer anotação importante referente ao cliente.
+Alerta: Informações extremamente importantes, aparecerá toda vez que acessar o contrato.
+Seu cadastro está concluído, aguarde a assinatura e finalize a O.S informando se o aceite foi 
+realizado, se o contrato será assinado no ato da instalação ou encerrando o processo quando 
+o cliente não prosseguir com a contratação.
+ABA O.S
+Ações:
+Finalizar:
+Mensagem: Preencha corretamente o Check List
+Colaborador Responsável: Manter em seu nome
+Agora deverá definir qual será a decisão a tomar:
+Finaliza Atendimento: Se marcar essa opção, a negociação acaba aqui.
+Próxima Tarefa: 
+ID 23 - 0.1.1 ATIVAÇÃO / ACEITE ELETRONICO: quando o cliente realizar o aceite.
+ID 24 - 0.1.2 ATIVAÇÃO / ASSINAR CONTRATO: quando for assinar no ato da instalação
+PROCESSOS DA NEGOCIAÇÃO
+A Primeira informação que deverá solicitar ao cliente é a LOCALIZAÇÃO FIXA, apenas através 
+dela conseguirá confirmar se possui viabilidade e se terá alguma taxa a cobrar.
+Em seguida, encaminhe os planos disponíveis e as seguintes condições:
+CONDIÇÕES IMPORTANTES
+ONU/ROTEADOR: Comodato (Emprestado enquanto for cliente)
+PRAZO DE INSTALAÇÃO: Quatro dias úteis (a partir da assinatura eletrônica do contrato)
+PLANOS PROMOCIONAIS: Valores válidos por 12 meses (sem renovação automática)
+CONTRATO: Permanência de 12 meses (Multa contratual em caso de descumprimento) 
+VELOCIDADE: Condicionada aos equipamentos do cliente serem aptos e compatíveis
+TAXA DE INSTALAÇÃO GRÁTIS: Sujeito a Analise Cadastral
+MUDANÇA DE ENDEREÇO: Tarifada (Sujeito a desconto ou isenção condicionado a analise)
+Após a confirmação de que ele entendeu e se interessa na contratação, encaminhe:
+DADOS PARA ANALISE CADASTRAL
+Nome completo
+Data de Nascimento
+CPF
+Nome da mãe.
+Se o cliente passar pela aprovação, encaminhe o check list de dados para realizar o cadastro:
+INFORMAÇÕES PESSOAIS
+RG e CPF ou CNH (Encaminhar foto da frente e verso):
+Endereço (Encaminhar Foto do Comprovante com CEP):
+Casa Própria ou Alugada (no caso de alugada informe o nome e telefone do proprietário):
+Telefone Pessoal e Comercial:
+E-Mail:
+1º Referência com nome e telefone:
+2º Referência com nome e telefone:
+INFORMAÇÕES COMERCIAIS
+Plano escolhido:
+Vencimento: (05, 10, 15 ou 20)
+INFORMAÇÕES WI FI
+Nome da Rede:
+Senha:
+INFORMAÇÕES CANAL DE VENDAS
+Panfleto
+Vendedor
+Indicação Cliente (Nome Completo)
+Indicação Outros (Quem e de onde)
+Concorrente (Nome)
+Redes Sociais (Qual)
+Outros (Defina)
+TODAS INFORMAÇÕES ACIMA SÃO NECESSÁRIAS E INDISPENSÁVEIS
+""" 
+    text_area.insert(tk.END, text)
+    text_area.configure(state='disabled')
+    font_style = ("calibri", 12)
+    text_area.configure(font=font_style)
+
+def renovacao():
+    messagebox.showinfo("Renovação", "Passo 1: Verifique a data de vencimento do seu contrato.\n"
+                        "Passo 2: Entre em contato com o setor de renovações.\n"
+                        "Passo 3: Siga as instruções para renovar o contrato.")
+
+def cancelamento():
+    messagebox.showinfo("Cancelamento", "Passo 1: Verifique a data de término do seu contrato.\n"
+                        "Passo 2: Entre em contato com o setor de cancelamentos.\n"
+                        "Passo 3: Siga as instruções para cancelar o contrato.")
+
+def troca_titularidade():
+    messagebox.showinfo("Troca de Titularidade", "Passo 1: Reúna os documentos necessários para a troca.\n"
+                        "Passo 2: Entre em contato com o setor de troca de titularidade.\n"
+                        "Passo 3: Siga as instruções para efetuar a troca.")
+
+def segunda_via_fatura():
+    messagebox.showinfo("Segunda Via da Fatura", "Passo 1: Acesse o portal do cliente.\n"
+                        "Passo 2: Faça login na sua conta.\n"
+                        "Passo 3: Procure pela opção de segunda via da fatura.")
+
+def mudanca_endereco():
+    messagebox.showinfo("Mudança de Endereço", "Passo 1: Reúna os documentos necessários para a mudança.\n"
+                        "Passo 2: Entre em contato com o setor de mudança de endereço.\n"
+                        "Passo 3: Siga as instruções para efetuar a mudança.")
+
+def mudanca_tecnologia():
+    messagebox.showinfo("Mudança de Tecnologia", "Passo 1: Verifique a disponibilidade da nova tecnologia.\n"
+                        "Passo 2: Entre em contato com o setor de mudança de tecnologia.\n"
+                        "Passo 3: Siga as instruções para efetuar a mudança.")
+
+
+def financeiro():
+    window = tk.Toplevel(root)
+    window.title("Contratação")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=50, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text ="""   OPÇÕES DE PAGAMENTO RAGTEK
+
+APLICATIVO 📱
+
+Android: Link do aplicativo na Play Store
+iPhone: Link do aplicativo na Apple Store
+No aplicativo, use seu CPF/CNPJ (apenas números) como USUÁRIO e a senha padrão é 123456. Você pode acessar seu BOLETO, copiar o CÓDIGO DE BARRAS e fazer o pagamento usando PIX COPIA E COLA (com baixa instantânea) ou CARTÃO DE CRÉDITO (à vista ou em até 3 vezes*).
+
+CENTRAL DE ATENDIMENTO 📱☎💻
+
+Link de acesso: https://api.whatsapp.com/send?phone=556239423412
+Telefone: 62 3942 3412 (somente chamadas ou mensagens via WhatsApp)
+Ao entrar em contato, selecione a opção 1 para Segunda Via da Fatura e escolha uma das opções disponíveis.
+
+CENTRAL DO ASSINANTE 📱💻
+
+No portal do cliente, use seu CPF/CNPJ (apenas números) como USUÁRIO e a senha padrão é 123456. Acesse seu BOLETO, copie o CÓDIGO DE BARRAS e faça o pagamento usando PIX COPIA E COLA (com baixa instantânea) ou CARTÃO DE CRÉDITO (à vista ou em até 3 vezes*).
+
+Link de acesso: https://www.ragtek.com.br/. Verifique seu e-mail cadastrado, pois é importante manter seus dados atualizados.
+
+Você também pode obter o boleto impresso na Central Ragtek mais próxima.
+
+*Consulte nossas condições. """
+    text_area.insert(tk.END, text)
+    text_area.configure(state='disabled')
+    font_style = ("calibri", 12)
+    text_area.configure(font=font_style)
+
+# Configurações da janela principal
+root = tk.Tk()
+root.title("Sistema de Atendimento ao Cliente")
+root.configure(bg="#222222")
+
+# Estilo dos botões
+button_style = {"bg": "#333333", "fg": "white", "font": ("Arial", 12), "width": 30}
+
+# Botões
+btn_contratacao = tk.Button(root, text="Contratação", command=contratacao, **button_style)
+btn_renovacao = tk.Button(root, text="Renovação", command=renovacao, **button_style)
+btn_cancelamento = tk.Button(root, text="Cancelamento", command=cancelamento, **button_style)
+btn_troca_titularidade = tk.Button(root, text="Troca de Titularidade", command=troca_titularidade, **button_style)
+btn_segunda_via_fatura = tk.Button(root, text="Segunda Via da Fatura", command=segunda_via_fatura, **button_style)
+btn_mudanca_endereco = tk.Button(root, text="Mudança de Endereço", command=mudanca_endereco, **button_style)
+btn_mudanca_tecnologia = tk.Button(root, text="Mudança de Tecnologia", command=mudanca_tecnologia, **button_style)
+btn_texto_financeiro = tk.Button(root, text="Texto Financeiro", command=financeiro, **button_style)
+# Posicionamento dos botões
+btn_contratacao.pack(pady=10)
+btn_renovacao.pack(pady=10)
+btn_cancelamento.pack(pady=10)
+btn_troca_titularidade.pack(pady=10)
+btn_segunda_via_fatura.pack(pady=10)
+btn_mudanca_endereco.pack(pady=10)
+btn_mudanca_tecnologia.pack(pady=10)
+btn_texto_financeiro.pack(pady=10)
+
+
+# Execução da janela principal
+root.mainloop()
