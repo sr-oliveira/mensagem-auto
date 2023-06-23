@@ -243,11 +243,84 @@ TODAS INFORMAÇÕES ACIMA SÃO NECESSÁRIAS E INDISPENSÁVEIS
     font_style = ("calibri", 12)
     text_area.configure(font=font_style)
 
-def renovacao():
-    messagebox.showinfo("Renovação", "Passo 1: Verifique a data de vencimento do seu contrato.\n"
-                        "Passo 2: Entre em contato com o setor de renovações.\n"
-                        "Passo 3: Siga as instruções para renovar o contrato.")
 
+
+
+
+
+
+def renovacao():
+    window = tk.Toplevel(root)
+    window.title("RENOVAÇÃO CONTRATUAL")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=50, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text = """ RENOVAÇÃO CONTRATUAL PESSOA FÍSICA
+
+Antes de começar a renovação deve-se Conferir e Atualizar TODOS DADOS CADASTRAIS
+(endereço, contato, arquivos e referência), após essa etapa, entre no contato.
+ABA CONTRATO
+Plano de Venda: 50MB (227), 100MB (226), 1000MB (223)
+Modelo para Impressão:
+50MB ou 100MB (16) - Contrato Renovação WIFI 2.4
+1000MB com 1 equipamento (15) - Contrato Renovação ILIMITADO AC
+1000MB com 2 equipamentos (17) - Contrato Renovação MESH 2R
+1000MB com 3 equipamentos (18) - Contrato Renovação MESH 3R
+Data renovação: Preencha com a data que está aplicando a renovação.
+Motivo Inclusão: Upgrade
+SALVAR
+
+ABA TAXA ATIVAÇÃO
+Taxa de Instalação (R$): 0,00 (zerar o valor);
+Valor Parcela: Desconto aplicado no produto x 12 (quantidade de meses de fidelidade)
+Fidelidade (meses): 12
+Data de Expiração: Mesma data da Renovação (ABA CONTRATO), porém do ano seguinte.
+Desconto Fidelidade (R$): 0,00 (zerar o valor);
+
+ABA PRODUTOS
+Selecionar um dos dois produtos e:
+Editar
+Descontos
+Novo -> Descrição (Promoção, Indicação Ricardo) -> Valor (Desconto a aplicar)
+SALVAR
+Selecionar o outro produto e repetir o processo.
+SALVAR
+
+Antes de prosseguir confira se o valor líquido ficou correto
+Contrato renovado, agora é só colocar pra aguardar assinatura e pedir ao cliente que realize.
+AGUARDANDO ASSINATURA
+Status acesso
+Aguardando assinatura
+
+OBSERVAÇÃO EXTREMAMENTE IMPORTANTE
+Assim que colocar o contrato para aguardar a assinatura, o cliente perderá a conexão, por
+mais que o oriente sobre isso, deverá acompanhar para que esse bloqueio não dure períodos
+longos, isso causa prejuízo ao cliente por falta de sinal e abre oportunidade para possíveis
+cancelamentos.
+TROCA DE EQUIPAMENTO
+Nas situações onde a troca de atendimento for necessária é preciso abrir um atendimento e
+vincular ao processo correspondente.
+     
+      
+       
+        
+         
+          
+            """
+    text_area.insert(tk.END, text)
+    text_area.configure(state='disabled')
+    font_style = ("calibri", 12)
+    text_area.configure(font=font_style)
+
+
+
+
+
+    
 def cancelamento():
     messagebox.showinfo("Cancelamento", "Passo 1: Verifique a data de término do seu contrato.\n"
                         "Passo 2: Entre em contato com o setor de cancelamentos.\n"
@@ -276,7 +349,7 @@ def mudanca_tecnologia():
 
 def financeiro():
     window = tk.Toplevel(root)
-    window.title("Contratação")
+    window.title("Texto Financeiro")
     window.configure(bg="#222222")
 
     # Configuração do widget de texto com barra de rolagem
@@ -307,18 +380,95 @@ Link de acesso: https://www.ragtek.com.br/. Verifique seu e-mail cadastrado, poi
 Você também pode obter o boleto impresso na Central Ragtek mais próxima.
 
 *Consulte nossas condições. """
+
     text_area.insert(tk.END, text)
     text_area.configure(state='disabled')
     font_style = ("calibri", 12)
     text_area.configure(font=font_style)
 
+
+
+def Texto_atendimento():
+    window = tk.Toplevel(root)
+    window.title("Atendimento/contratação")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=50, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text = """  Olá, BOA TARDE 😃
+Tudo bem?!
+
+Meu nome é GUSTAVO e vou prosseguir com o seu atendimento.
+Antes de continuar, preciso que confirme o NOME COMPLETO e CPF do TITULAR, depois é só me informar como posso lhe ajudar.
+Lembrando, que é sempre um prazer atendê-lo! 😀
+
+Em que posso lhe ajudar?
+------------------------------------------------------------------------------------------------------------------------
+
+Ainda não é nosso cliente? Não se preocupe, me informe apenas seu NOME e a LOCALIZAÇÃO FIXA de onde precisa da internet.
+Lembrando, que é sempre um prazer atendê-lo! 😀
+------------------------------------------------------------------------------------------------------------------------
+
+Temos cobertura para sua região! 
+INFORMAÇÕES IMPORTANTES
+
+ONU/ROTEADOR em comodato (Emprestado enquanto for cliente);
+O prazo de instalação é de até quatro dias úteis a partir do cadastro e assinatura eletrônica do contrato, caso você necessite marcar data ou horário específico estará sujeito à análise prévia.
+
+Planos Promocionais com 12 meses de permanência e multa contratual em caso descumprimento.
+A velocidade contratada está condicionada aos equipamentos do cliente serem compatíveis.
+
+TAXA DE INSTALAÇÃO GRÁTIS PARA CLIENTES APROVADOS E ONDE A METRAGEM DO DROP NÃO ULTRAPASSE 300 METROS (CABO QUE VAI DO POSTE ATÉ A RESIDÊNCIA DO CLIENTE), NOS CASOS ONDE ULTRAPASSAR, SERÁ COBRADA UMA TAXA DE SERVIÇO DE R$ 1,00 O METRO EXCEDENTE
+--------------------------------------------------------------------------------------------------------------------------
+
+Me passa esses dados para analise cadastral
+
+DADOS PARA APROVAÇÃO CADASTRAL
+CPF: 
+Nome completo:
+Nome da mãe:
+Data de nascimento:
+--------------------------------------------------------------------------------------------------------------------------
+
+FOI APROVADO!!
+
+Agora falta pouco, me encaminha os dados solicitados que já vamos fazer o contrato e colocar na fila de instalação.
+
+INFORMAÇÕES PESSOAIS PARA CADASTRO
+
+RG e CPF ou CNH (Encaminhar foto da frente e verso):
+Endereço (Encaminhar Foto do Comprovante com CEP):
+Informar se a Casa é Própria ou Alugada (no caso de alugada, necessário o nome e o telefone do proprietário):
+Telefone Pessoal e Comercial:
+E-Mail:
+1º Telefone de Referência com nome:
+2º Telefone de Referência com nome:
+
+INFORMAÇÕES CONTRATUAIS
+
+Plano escolhido:
+Vencimento: 05, 10, 15 ou 20.
+
+TODAS INFORMAÇÕES ACIMA SÃO NECESSÁRIAS E INDISPENSÁVEIS   """  
+
+    text_area.insert(tk.END, text)
+    text_area.configure(state='disabled')
+    font_style = ("MS PMincho", 12)
+    text_area.configure(font=font_style)
+
+
+
+
 # Configurações da janela principal
 root = tk.Tk()
-root.title("Sistema de Atendimento ao Cliente")
+root.title("ATENDIMENTO RAGTEK")
 root.configure(bg="#222222")
 
 # Estilo dos botões
-button_style = {"bg": "#333333", "fg": "white", "font": ("Arial", 12), "width": 30}
+button_style = {"bg": "#333333", "fg": "white", "font": ("Arial", 12), "width": 50}
 
 # Botões
 btn_contratacao = tk.Button(root, text="Contratação", command=contratacao, **button_style)
@@ -329,6 +479,7 @@ btn_segunda_via_fatura = tk.Button(root, text="Segunda Via da Fatura", command=s
 btn_mudanca_endereco = tk.Button(root, text="Mudança de Endereço", command=mudanca_endereco, **button_style)
 btn_mudanca_tecnologia = tk.Button(root, text="Mudança de Tecnologia", command=mudanca_tecnologia, **button_style)
 btn_texto_financeiro = tk.Button(root, text="Texto Financeiro", command=financeiro, **button_style)
+btn_texto_atendimento = tk.Button(root, text="Texto Atendimento", command=Texto_atendimento, **button_style)
 # Posicionamento dos botões
 btn_contratacao.pack(pady=10)
 btn_renovacao.pack(pady=10)
@@ -338,6 +489,7 @@ btn_segunda_via_fatura.pack(pady=10)
 btn_mudanca_endereco.pack(pady=10)
 btn_mudanca_tecnologia.pack(pady=10)
 btn_texto_financeiro.pack(pady=10)
+btn_texto_atendimento.pack(pady=10)
 
 
 # Execução da janela principal
