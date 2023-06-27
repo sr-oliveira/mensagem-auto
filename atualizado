@@ -1,0 +1,149 @@
+import time
+from tkinter import messagebox
+from tkinter import scrolledtext
+import tkinter as tk
+import webbrowser
+
+# Função para exibir os passos de contratação
+def contratacao():
+    window = tk.Toplevel(root)
+    window.title("Contratação")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=50, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text = """ """
+    text_area.insert(tk.END, text)
+    text_area.configure(state='disabled')
+    font_style = ("calibri", 12)
+    text_area.configure(font=font_style)
+
+
+def renovacao():
+    window = tk.Toplevel(root)
+    window.title("renovação")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=50, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text = """ """
+    text_area.insert(tk.END, text)
+    text_area.configure(state='disabled')
+    font_style = ("calibri", 12)
+    text_area.configure(font=font_style)
+
+
+def cancelamento():
+    window = tk.Toplevel(root)
+    window.title("Cancelamento")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=50, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text = """ """
+    text_area.insert(tk.END, text)
+    text_area.configure(state='disabled')
+    font_style = ("calibri", 12)
+    text_area.configure(font=font_style)
+
+
+
+
+def mudanca_endereco():
+    window = tk.Toplevel(root)
+    window.title("Mudança de endereço")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=50, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text = """ """
+    text_area.insert(tk.END, text)
+    text_area.configure(state='disabled')
+    font_style = ("calibri", 12)
+    text_area.configure(font=font_style)
+
+
+
+
+# Função para abrir a conversa no WhatsApp
+def open_conversation():
+    # Obtenha os números de telefone e a mensagem pré-definida
+    numbers = number_input.get().split(',')  # Separa os números por vírgula
+    message = message_input.get()
+
+    # Verifique se os números de telefone foram fornecidos
+    if numbers:
+        for number in numbers:
+            # Construa o link para abrir a conversa no WhatsApp para cada número
+            url = f"https://web.whatsapp.com/send?phone={number}&text={message}"
+
+            # Abra o link no navegador padrão
+            webbrowser.open(url)
+
+            # Aguarde 1 segundo antes de abrir a próxima conversa
+            time.sleep(30)
+
+
+
+# Configurações da janela principal
+root = tk.Tk()
+root.title("PAINEL DE ATENDIMENTO")
+root.configure(bg="#222222")
+
+# Estilo dos botões
+button_style = {"bg": "#333333", "fg": "white", "font": ("Arial", 12), "width": 50}
+
+# Botões
+btn_contratacao = tk.Button(root, text="Contratação", command=contratacao, **button_style)
+btn_renovacao = tk.Button(root, text="Renovação", command=renovacao, **button_style)
+btn_cancelamento = tk.Button(root, text="Cancelamento", command=cancelamento, **button_style)
+btn_mudanca_endereco = tk.Button(root, text="Mudança de Endereço", command=mudanca_endereco, **button_style)
+
+
+
+
+
+
+from tkinter import scrolledtext
+
+# Entrada de número e mensagem
+number_label = tk.Label(root, text="Número do Cliente:", bg="#222222", fg="white", font=("Arial", 12))
+number_label.pack(pady=10)
+number_input = tk.Entry(root, width=50, font=("Arial", 12), bd=3)
+number_input.pack(pady=5)
+
+message_label = tk.Label(root, text="Mensagem Pré-definida:", bg="#222222", fg="white", font=("Arial", 12))
+message_label.pack(pady=10)
+message_input = scrolledtext.ScrolledText(root, width=50, height=5, font=("Arial", 12), bd=3)  # Aumentar a altura da caixa de texto
+message_input.pack(pady=5)
+
+
+
+# Botão para abrir a conversa no WhatsApp
+btn_whatsapp = tk.Button(root, text="Enviar Mensagem", command=open_conversation, **button_style)
+btn_whatsapp.pack(pady=10)
+
+
+
+# Posicionamento dos botões
+btn_contratacao.pack(pady=10)
+btn_contratacao.pack(pady=10)
+btn_renovacao.pack(pady=10)
+btn_cancelamento.pack(pady=10)
+
+
+
+# Executa o loop principal da interface gráfica
+root.mainloop()
