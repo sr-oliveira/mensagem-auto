@@ -1,8 +1,8 @@
 import time
-from tkinter import messagebox
-from tkinter import scrolledtext
+from tkinter import filedialog, messagebox, scrolledtext
 import tkinter as tk
 import webbrowser
+
 
 # Função para exibir os passos de contratação
 def contratacao():
@@ -24,7 +24,7 @@ def contratacao():
 
 def renovacao():
     window = tk.Toplevel(root)
-    window.title("renovação")
+    window.title("Renovação")
     window.configure(bg="#222222")
 
     # Configuração do widget de texto com barra de rolagem
@@ -56,8 +56,6 @@ def cancelamento():
     text_area.configure(font=font_style)
 
 
-
-
 def mudanca_endereco():
     window = tk.Toplevel(root)
     window.title("Mudança de endereço")
@@ -73,8 +71,6 @@ def mudanca_endereco():
     text_area.configure(state='disabled')
     font_style = ("calibri", 12)
     text_area.configure(font=font_style)
-
-
 
 
 # Função para abrir a conversa no WhatsApp
@@ -93,8 +89,47 @@ def open_conversation():
             webbrowser.open(url)
 
             # Aguarde 1 segundo antes de abrir a próxima conversa
-            time.sleep(30)
+            time.sleep(1)
 
+
+def editar_notas_desenhos():
+    window = tk.Toplevel(root)
+    window.title("Editar Notas")
+    window.configure(bg="#222222")
+
+    # Configuração do widget de texto com barra de rolagem
+    text_area = scrolledtext.ScrolledText(window, width=80, height=25, wrap=tk.WORD)
+    text_area.pack(padx=10, pady=10)
+
+    # Texto a ser exibido no widget de texto
+    text = """Digite suas notas aqui..."""
+    text_area.insert(tk.END, text)
+    font_style = ("calibri", 12)
+    text_area.configure(font=font_style)
+
+
+def criar_relatorio():
+    # Obter os valores digitados pelo usuário
+    numero = number_input.get()
+    mensagem = message_input.get("1.0", tk.END)
+
+    # Verificar se todos os campos foram preenchidos
+    if numero and mensagem:
+        # Abrir a caixa de diálogo para selecionar o local do arquivo de relatório
+        filepath = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Arquivo de Texto", "*.txt")])
+        if filepath:
+            try:
+                # Salvar os dados no arquivo de relatório
+                with open(filepath, "w") as file:
+                    file.write(f"Número: {numero}\n")
+                    file.write(f"Mensagem:\n{mensagem}")
+                messagebox.showinfo("Relatório Criado", "O relatório foi criado e salvo com sucesso!")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Ocorreu um erro ao salvar o relatório:\n{str(e)}")
+        else:
+            messagebox.showwarning("Aviso", "Nenhum local de arquivo selecionado. O relatório não será salvo.")
+    else:
+        messagebox.showwarning("Aviso", "Por favor, preencha todos os campos para criar o relatório.")
 
 
 # Configurações da janela principal
@@ -103,20 +138,26 @@ root.title("PAINEL DE ATENDIMENTO")
 root.configure(bg="#222222")
 
 # Estilo dos botões
-button_style = {"bg": "#333333", "fg": "white", "font": ("Arial", 12), "width": 50}
+button_style = {"bg": "#333333", "fg": "white", "font": ("Arial", 12), "width": 15, "bd": 3}
+
+# Frame para os botões
+button_frame = tk.Frame(root, bg="#222222")
+button_frame.pack(pady=10)
 
 # Botões
-btn_contratacao = tk.Button(root, text="Contratação", command=contratacao, **button_style)
-btn_renovacao = tk.Button(root, text="Renovação", command=renovacao, **button_style)
-btn_cancelamento = tk.Button(root, text="Cancelamento", command=cancelamento, **button_style)
-btn_mudanca_endereco = tk.Button(root, text="Mudança de Endereço", command=mudanca_endereco, **button_style)
+btn_contratacao = tk.Button(button_frame, text="Contratação", command=contratacao, **button_style)
+btn_renovacao = tk.Button(button_frame, text="Renovação", command=renovacao, **button_style)
+btn_cancelamento = tk.Button(button_frame, text="Cancelamento", command=cancelamento, **button_style)
+btn_mudanca_endereco = tk.Button(button_frame, text="Mudança de Endereço", command=mudanca_endereco, **button_style)
+btn_editar_notas_desenhos = tk.Button(button_frame, text="NOTAS", command=editar_notas_desenhos, **button_style)
+btn_criar_relatorio = tk.Button(button_frame, text="Criar Relatório", command=criar_relatorio, **button_style)
 
-
-
-
-
-
-from tkinter import scrolledtext
+btn_contratacao.pack(side=tk.LEFT, padx=10)
+btn_renovacao.pack(side=tk.LEFT, padx=10)
+btn_cancelamento.pack(side=tk.LEFT, padx=10)
+btn_mudanca_endereco.pack(side=tk.LEFT, padx=10)
+btn_editar_notas_desenhos.pack(side=tk.LEFT, padx=10)
+btn_criar_relatorio.pack(side=tk.LEFT, padx=10)
 
 # Entrada de número e mensagem
 number_label = tk.Label(root, text="Número do Cliente:", bg="#222222", fg="white", font=("Arial", 12))
@@ -126,24 +167,12 @@ number_input.pack(pady=5)
 
 message_label = tk.Label(root, text="Mensagem Pré-definida:", bg="#222222", fg="white", font=("Arial", 12))
 message_label.pack(pady=10)
-message_input = scrolledtext.ScrolledText(root, width=50, height=5, font=("Arial", 12), bd=3)  # Aumentar a altura da caixa de texto
+message_input = tk.Entry(root, width=50, font=("Arial", 12), bd=3)
 message_input.pack(pady=5)
-
-
 
 # Botão para abrir a conversa no WhatsApp
 btn_whatsapp = tk.Button(root, text="Enviar Mensagem", command=open_conversation, **button_style)
 btn_whatsapp.pack(pady=10)
-
-
-
-# Posicionamento dos botões
-btn_contratacao.pack(pady=10)
-btn_contratacao.pack(pady=10)
-btn_renovacao.pack(pady=10)
-btn_cancelamento.pack(pady=10)
-
-
 
 # Executa o loop principal da interface gráfica
 root.mainloop()
